@@ -20,3 +20,10 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+datos = FOREACH u GENERATE
+        birthday AS fecha,
+        ToString(ToDate(birthday, 'yyyy-MM-dd'),'yyyy') AS mes
+        ;
+grouped = GROUP datos BY (mes);
+conteo = FOREACH grouped GENERATE group, COUNT(datos.mes);
+STORE conteo INTO 'output' USING PigStorage(',');

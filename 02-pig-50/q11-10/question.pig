@@ -38,3 +38,9 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+estilos = FOREACH u GENERATE surname AS apellido,
+                    UPPER(surname) AS mayuscula,
+                    LOWER(surname) AS minuscula
+;
+orden = ORDER estilos BY apellido ASC, mayuscula ASC, minuscula ASC;
+STORE orden INTO 'output' USING PigStorage(',');

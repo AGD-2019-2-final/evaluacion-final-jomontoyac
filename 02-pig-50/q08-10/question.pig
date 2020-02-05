@@ -14,3 +14,14 @@ fs -rm -f -r output;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+tabla = LOAD 'data.tsv' USING PigStorage('\t')
+    AS (f1:CHARARRAY
+        ,f2:BAG{t:TUPLE(p:CHARARRAY)}
+        ,f3:MAP[]
+        );
+
+x = FOREACH tabla GENERATE FLATTEN(f2), FLATTEN(f3);
+f = FOREACH x GENERATE $0,$1;
+grouped = GROUP f BY ($0,$1);
+conteo = FOREACH grouped GENERATE $0, COUNT(f);      
+STORE conteo INTO 'output' USING PigStorage('\t');

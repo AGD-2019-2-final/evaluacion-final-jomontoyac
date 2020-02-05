@@ -39,4 +39,6 @@ LOAD DATA LOCAL INPATH 'tbl1.csv' INTO TABLE tbl1;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
-
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT DISTINCT z.tag FROM (SELECT explode(c5) AS tag FROM tbl0) z ORDER BY z.tag;

@@ -39,3 +39,16 @@ LOAD DATA LOCAL INPATH 'tbl1.csv' INTO TABLE tbl1;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT t0.c1 AS num, t0.c2 AS letter, valor
+FROM tbl0 t0
+LEFT JOIN
+(
+SELECT t1.c1 AS cod, clave, valor
+FROM tbl1 t1
+LATERAL VIEW explode(t1.c4) adTable AS clave,valor
+) tt
+ON tt.cod = t0.c1
+AND tt.clave = t0.c2
+;

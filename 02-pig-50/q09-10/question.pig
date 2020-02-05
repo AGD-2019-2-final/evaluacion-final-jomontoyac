@@ -27,5 +27,15 @@
 -- 
 fs -rm -f -r output;
 --
-
+tabla = LOAD 'data.csv' USING PigStorage(',')
+    AS (id:INT
+        ,firstname:CHARARRAY
+        ,surname:CHARARRAY
+        ,birthday:CHARARRAY
+        ,color:CHARARRAY
+        ,quantity:INT
+        )
+;
+y = FOREACH tabla GENERATE CONCAT(firstname,'@',surname);
+STORE y INTO 'output' USING PigStorage(',');
 

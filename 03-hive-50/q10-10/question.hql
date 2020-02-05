@@ -24,3 +24,11 @@ LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
 
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT claves, count(*) AS num
+FROM t0 t0
+LATERAL VIEW explode(map_keys(t0.c3)) adTable AS claves
+GROUP BY claves
+ORDER BY claves ASC
+;

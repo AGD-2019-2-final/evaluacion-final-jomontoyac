@@ -40,3 +40,10 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+datos = FOREACH u GENERATE
+        ToString(ToDate(birthday, 'yyyy-MM-dd'),'yyyy-MM-dd'),
+        LOWER(ToString(ToDate(birthday, 'yyyy-MM-dd'),'MMM')),
+        ToString(ToDate(birthday, 'yyyy-MM-dd'),'MM'),
+        ToString(ToDate(birthday, 'yyyy-MM-dd'),'M');
+
+STORE datos INTO 'output' USING PigStorage(',');

@@ -27,4 +27,12 @@ LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
 
-
+INSERT OVERWRITE LOCAL DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT tag1, tag2, count(*) AS num 
+FROM t0 t0
+LATERAL VIEW explode(t0.c2) adTable AS tag1
+LATERAL VIEW explode(map_keys(t0.c3)) adTable2 AS tag2
+GROUP BY tag1, tag2
+ORDER BY tag1 ASC, tag2 ASC
+;
